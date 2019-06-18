@@ -3,21 +3,35 @@
 
 <head>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <title>Tictactoe</title>
+    <title>TicTacToe</title>
     <style>
-    table{
-        text-align: center;
-        font-weight: 400;
-    }
+        td {
+            height: 160px;
+            width: 160px;
+        }
+        .hide{
+            visibility: hidden;
+            font-weight: 1;
+            position: absolute;
+
+        }
+        img{
+            position: relative;
+        }
     </style>
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
+            <div class="col-lg-12" style="text-align: center;">
+                <h1 style="font-weight: bold">Tic Tac Toe</h1>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-3" style="height:577px">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-12" style="text-align: center;">
                         <img src="aravindh.jpeg" class="img-fluid" style="margin-top: 15px">
                         <h1 style="text-align: center">Aravindh</h1>
 
@@ -27,36 +41,42 @@
             </div>
             <div class="col-lg-6" style="background-color:white;height:577px">
                 <div class="row">
+                    <table class="table" border="2px" style="height: 60%; width: 60%; margin: 70px 0px 0px 120px;">
+                        <tbody>
+                            <tr>
+                                <td onclick="myfun(this.id)" id="100"></td>
+                                <td onclick="myfun(this.id)" id="101"></td>
+                                <td onclick="myfun(this.id)" id="102"></td>
+                            </tr>
+                            <tr>
+                                <td onclick="myfun(this.id)" id="110"></td>
+                                <td onclick="myfun(this.id)" id="111"></td>
+                                <td onclick="myfun(this.id)" id="112"></td>
+                            </tr>
+                            <tr>
+                                <td onclick="myfun(this.id)" id="120"></td>
+                                <td onclick="myfun(this.id)" id="121"></td>
+                                <td onclick="myfun(this.id)" id="122"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <div class="row">
                     <div class="col-lg-12" style="text-align: center;">
-                        <h1>Tic Tac Toe</h1>
+                        <button class="btn btn-danger" onclick="reset()">Reset</button>
                     </div>
                 </div>
-                <table class="table" border="2px" style="height: 60%; width: 60%; margin: 70px 0px 0px 120px;">
-                    <tbody>
-                        <tr>
-                            <td onclick="myfun(this.id)" id="100"></td>
-                            <td onclick="myfun(this.id)" id="101"></td>
-                            <td onclick="myfun(this.id)" id="102"></td>
-                        </tr>
-                        <tr>
-                            <td onclick="myfun(this.id)" id="110"></td>
-                            <td onclick="myfun(this.id)" id="111"></td>
-                            <td onclick="myfun(this.id)" id="112"></td>
-                        </tr>
-                        <tr>
-                            <td onclick="myfun(this.id)" id="120"></td>
-                            <td onclick="myfun(this.id)" id="121"></td>
-                            <td onclick="myfun(this.id)" id="122"></td>
-                        </tr>
-                    </tbody>
-                </table>
+
             </div>
             <div class="col-lg-3" style="height:577px">
                 <div class="row">
                     <div class="col-lg-12">
                         <img src="partha.jpeg" class="img-fluid">
                         <h1 style="text-align: center">Parthasarathi</h1>
-                        
+
+                        <p id="checks"></p>
                     </div>
                 </div>
 
@@ -64,92 +84,106 @@
         </div>
     </div>
     <script>
+        var x_score=0,o_score=0;
         var count = 0;
-        var arr=[[],[],[]]
-       function assign_value(val,axis){
-           axis=parseInt(axis);
-           var y=Math.round( axis%10 );
-           axis=axis/10;
-           var x=Math.round( axis%10 );
-           arr[x][y]=val;    
-       }
-     
-    
+        var arr = [[], [], []];
+        function assign_value(val, axis) {
+            axis = parseInt(axis);
+            var y = Math.round(axis % 10);
+            axis = axis / 10;
+            var x = Math.round(axis % 10);
+            arr[x][y] = val;
+        }
+
+        function reset(){
+            document.getElementById("100").innerHTML="";
+            document.getElementById("101").innerHTML="";
+            document.getElementById("102").innerHTML="";
+            document.getElementById("110").innerHTML="";
+            document.getElementById("111").innerHTML="";
+            document.getElementById("112").innerHTML="";
+            document.getElementById("120").innerHTML="";
+            document.getElementById("121").innerHTML="";
+            document.getElementById("122").innerHTML="";
+           arr = [[], [], []];
+        }
         function myfun(val) {
             var gets = document.getElementById(val).textContent;
-            if((gets != "X")&&(gets!="O")){
-                
-            if (count % 2 == 0) {
-                document.getElementById(val).innerHTML = "X";
-                assign_value(1,val);
+            if ((gets != "X") && (gets != "O")) {
+
+                if (count % 2 == 0) {
+                    document.getElementById(val).innerHTML = "<img src='x.jpg'><p class='hide'>X</p>";
+                    assign_value(1, val);
+                }
+                else {
+                    document.getElementById(val).innerHTML = "<img src='o.jpg'><p class='hide'>O</p>";
+                    assign_value(0, val);
+                }
+
+                count++;
+
+                if (count > 4) {
+                    var TeamA = validate_array(1);
+                    var TeamB = validate_array(0);
+                    if (TeamA == true) {
+                        x_score+=1;
+                        alert("Team X is win "+"|| Score of X : "+x_score+"|| Score of O : "+o_score);                        
+                        count=0;
+                        reset();
+                    }
+                    else if (TeamB == true) {
+                        o_score+=1;
+                        alert("Team O is win "+"|| Score of X : "+x_score+"|| Score of O : "+o_score);                        
+                        count=0;
+                        reset();
+                    } 
+                }
+                if(count==9){
+                	if(TeamA==false && TeamB==false){
+                    	alert("Tie Game "+"|| Score of X : "+x_score+"|| Score of O : "+o_score);
+                    }
+                }
+
             }
-            else {
-                document.getElementById(val).innerHTML = "O";
-                assign_value(0,val);
-                }
-               
-              count++;
-            
-            if(count>4){
-                  var TeamA= validate_array(1);
-                  var TeamB= validate_array(0);
-                  if(TeamA==true){
-                      alert("TeamA is win");
-                  }
-                  else if(TeamB==true){
-                      alert("TeamB is win");
-                  }
-                  }
-                  
-                }
-                }
-                  
-           
-           
-        function validate_array(binary_val){
-           var sum1=0,sum2=0,sum3=0,sum4=0;
-           for(var i=0;i<3;i++){
-               for(var j=0;j<3;j++){
-                   if(arr[i][j]==binary_val){
-                       sum1++;
-                   }
-                   if(arr[j][i]==binary_val){
-                       sum2++;
-                   }
-               }
-               
-                 if(arr[i][i]==binary_val){
-                     sum3++;
-                 }
-                 
-                
-               if(sum1==3||sum2==3||sum3==3){
-                   return true;
-               }
-               sum1=0;
-               sum2=0;
-               }
-               var p=0,q=2;
-               for(p=0,q=2;p<3;p++,q--){
-                   if(arr[p][q]==binary_val){
-                       sum4++;
-                   }
-               }
-               if(sum4==3){
-                   return true;
-               }
-            
-               
+        }
 
-               return false;
-               
-           }
-            
-        
-        
 
+
+        function validate_array(binary_val) {
+            var sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0;
+            for (var i = 0; i < 3; i++) {
+                for (var j = 0; j < 3; j++) {
+                    if (arr[i][j] == binary_val) {
+                        sum1++;
+                    }
+                    if (arr[j][i] == binary_val) {
+                        sum2++;
+                    }
+                }
+
+                if (arr[i][i] == binary_val) {
+                    sum3++;
+                }
+
+
+                if (sum1 == 3 || sum2 == 3 || sum3 == 3) {
+                    return true;
+                }
+                sum1 = 0;
+                sum2 = 0;
+            }
+            var p = 0, q = 2;
+            for (p = 0, q = 2; p < 3; p++ , q--) {
+                if (arr[p][q] == binary_val) {
+                    sum4++;
+                }
+            }
+            if (sum4 == 3) {
+                return true;
+            }
+            return false;
+        }
     </script>
-
 </body>
 
 </html>
